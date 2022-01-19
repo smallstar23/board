@@ -39,6 +39,8 @@
 	            sql= "select b_idx, b_userid, b_title, b_regdate, b_hit, b_like, b_content from tb_board order by b_idx desc";
 	            pstmt = conn.prepareStatement(sql);
 	            rs = pstmt.executeQuery();
+	            
+	            
 	         
 
 				%>
@@ -76,8 +78,25 @@ while(rs.next()){
 %>
       <tr>
          <td><%=b_idx %></td>
-         <td><a href="./view.jsp?b_idx=<%=b_idx %>"><%=b_title %></a></td>
+         <td><a href="./view.jsp?b_idx=<%=b_idx %>"><%=b_title %>
+       
+         <%
+         ResultSet rs1=null;
+         int totalre=0;
+         sql="select count(r_idx) as total from tb_reply where r_boardidx=?";
+         pstmt = conn.prepareStatement(sql);
+         pstmt.setString(1, b_idx);
+         rs1 = pstmt.executeQuery();
+         if(rs1.next()){
+            totalre=rs1.getInt("total");
+            %>
+            [<%=totalre %>]
+            <%
+         }
+         %>
          
+         
+         </a></td>
          <td><%=b_userid %></td>
          <td><%=b_hit %></td>
          <td><%=b_regdate %></td>
